@@ -3,7 +3,7 @@ package com.coralpersimmon.mynotenext.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "notes")
@@ -24,8 +24,8 @@ public class Note {
     String content;
 
     @Column(name = "created_at")
-    Date createdAt;
+    Timestamp createdAt;
 
     @Column(name = "updated_at")
-    Date updatedAt;
+    Timestamp updatedAt;
 }
