@@ -17,4 +17,10 @@ public class User {
 
     @Column(name = "password")
     String password;
+
+    @Column(name = "userName")
+    String userName;
+
+    @Column(name = "email")
+    String email;
 }
