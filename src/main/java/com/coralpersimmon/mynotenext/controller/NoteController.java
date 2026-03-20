@@ -7,9 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class NoteController {
@@ -23,5 +21,17 @@ public class NoteController {
 
         Note note = noteService.getNoteById(noteId);
         return ResponseEntity.status(HttpStatus.CREATED).body(note);
+    }
+
+    @PutMapping("/notes/{noteid}")
+    public ResponseEntity<Note> updateNote(@PathVariable Integer noteid,
+                                           @RequestBody @Valid NoteRequest noteRequest) {
+        Note note = noteService.getNoteById(noteid);
+        if(note == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        noteService.updateNote(noteid,noteRequest);
+        return ResponseEntity.ok(noteService.getNoteById(noteid));
     }
 }

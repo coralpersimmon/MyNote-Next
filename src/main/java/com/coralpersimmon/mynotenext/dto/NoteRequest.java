@@ -9,9 +9,6 @@ import lombok.Setter;
 @Setter
 public class NoteRequest {
     @NotNull
-    private Integer userId;
-
-    @NotNull
     private NoteCategory category;
 
     @NotNull

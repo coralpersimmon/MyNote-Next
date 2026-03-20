@@ -7,4 +7,5 @@ public interface NoteService
 {
     Note getNoteById(Integer noteId);
     Integer createNote(NoteRequest noteRequest);
+    void updateNote(Integer noteId,NoteRequest noteRequest);
 }

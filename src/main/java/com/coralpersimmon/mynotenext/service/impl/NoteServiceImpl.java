@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -23,12 +24,26 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Integer createNote(NoteRequest noteRequest) {
         Note note = new Note();
-        note.setUserId(noteRequest.getUserId());
-        note.setCategory(noteRequest.getCategory());
-        note.setTitle(noteRequest.getTitle());
-        note.setContent(noteRequest.getContent());
+
+        NoteFields(note, noteRequest);
 
         Note savedNote = noteRepository.save(note);
         return savedNote.getId();
+    }
+
+    @Override
+    public void updateNote(Integer noteId, NoteRequest noteRequest) {
+        Optional<Note> optionalNote = noteRepository.findById(noteId);
+        Note note = optionalNote.get();
+
+        NoteFields(note, noteRequest);
+
+        noteRepository.save(note);
+    }
+
+    private void NoteFields(Note note, NoteRequest noteRequest) {
+        note.setCategory(noteRequest.getCategory());
+        note.setTitle(noteRequest.getTitle());
+        note.setContent(noteRequest.getContent());
     }
 }
