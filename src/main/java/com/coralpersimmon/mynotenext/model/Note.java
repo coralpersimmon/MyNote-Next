@@ -1,31 +1,44 @@
 package com.coralpersimmon.mynotenext.model;
 
+import com.coralpersimmon.mynotenext.constant.NoteCategory;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notes")
-@Data
+@Getter
+@Setter
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    Integer id;
+    private Integer id;
 
-    @Column(name = "userId")
-    Integer userId;
+    @Column(name = "user_id")
+    private Integer userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private NoteCategory category;
 
     @Column(name = "title")
-    String title;
+    private String title;
 
     @Column(name = "content")
-    String content;
+    private String content;
 
-    @Column(name = "created_at")
-    Timestamp createdAt;
+    @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    Timestamp updatedAt;
+    @UpdateTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 }

@@ -1,26 +1,28 @@
 package com.coralpersimmon.mynotenext.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    Integer userId;
+    private Integer userId;
 
     @Column(name = "account")
-    String account;
+    private String account;
 
     @Column(name = "password")
-    String password;
+    private String password;
 
     @Column(name = "user_name")
-    String userName;
+    private String userName;
 
-    @Column(name = "email")
-    String email;
+    @Column(name = "email", unique = true)
+    private String email;
 }
