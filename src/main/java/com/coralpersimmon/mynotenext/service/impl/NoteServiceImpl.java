@@ -2,6 +2,7 @@ package com.coralpersimmon.mynotenext.service.impl;
 
 import com.coralpersimmon.mynotenext.constant.NoteCategory;
 import com.coralpersimmon.mynotenext.dao.NoteRepository;
+import com.coralpersimmon.mynotenext.dto.NoteQueryParams;
 import com.coralpersimmon.mynotenext.dto.NoteRequest;
 import com.coralpersimmon.mynotenext.model.Note;
 import com.coralpersimmon.mynotenext.service.NoteService;
@@ -17,9 +18,11 @@ public class NoteServiceImpl implements NoteService {
     private NoteRepository noteRepository;
 
     @Override
-    public List<Note> getNotes(NoteCategory noteCategory, String search) {
+    public List<Note> getNotes(NoteQueryParams noteQueryParams) {
         Specification<Note> specification = (root, query, criteriaBuilder) ->
                 criteriaBuilder.conjunction();
+        NoteCategory noteCategory = noteQueryParams.getCategory();
+        String search = noteQueryParams.getSearch();
 
         if (noteCategory != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
