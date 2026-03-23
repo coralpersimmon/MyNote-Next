@@ -20,11 +20,17 @@ public class NoteController {
     private NoteService noteService;
 
     @GetMapping("/notes")
-    public ResponseEntity<List<Note>> getNotes(@RequestParam(required = false)NoteCategory category,
-                                               @RequestParam(required = false)String search) {
+    public ResponseEntity<List<Note>> getNotes(// Filtering
+                                               @RequestParam(required = false) NoteCategory category,
+                                               @RequestParam(required = false) String search,
+                                               // Sorting
+                                               @RequestParam(defaultValue = "createdAt") String orderBy,
+                                               @RequestParam(defaultValue = "desc") String sort) {
         NoteQueryParams noteQueryParams = new NoteQueryParams();
         noteQueryParams.setCategory(category);
         noteQueryParams.setSearch(search);
+        noteQueryParams.setOrderBy(orderBy);
+        noteQueryParams.setSort(sort);
 
         List<Note> noteList = noteService.getNotes(noteQueryParams);
         return ResponseEntity.status(HttpStatus.OK).body(noteList);

@@ -9,4 +9,6 @@ import lombok.Setter;
 public class NoteQueryParams {
     private NoteCategory category;
     private String search;
+    private String orderBy;
+    private String sort;
 }

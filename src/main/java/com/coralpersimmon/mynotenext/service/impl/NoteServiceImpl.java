@@ -8,6 +8,7 @@ import com.coralpersimmon.mynotenext.model.Note;
 import com.coralpersimmon.mynotenext.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public class NoteServiceImpl implements NoteService {
                 criteriaBuilder.conjunction();
         NoteCategory noteCategory = noteQueryParams.getCategory();
         String search = noteQueryParams.getSearch();
+        String orderBy = noteQueryParams.getOrderBy();
+        String sort = noteQueryParams.getSort();
 
         if (noteCategory != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
@@ -34,7 +37,11 @@ public class NoteServiceImpl implements NoteService {
                     criteriaBuilder.like(root.get("title"), "%" + search + "%"));
         }
 
-        return noteRepository.findAll(specification);
+        Sort.Direction direction = "asc".equalsIgnoreCase(sort)
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
+        return noteRepository.findAll(specification, Sort.by(direction, orderBy));
     }
 
     @Override
