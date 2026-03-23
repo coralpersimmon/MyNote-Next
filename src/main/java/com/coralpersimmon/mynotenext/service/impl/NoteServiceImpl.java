@@ -7,9 +7,7 @@ import com.coralpersimmon.mynotenext.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -17,8 +15,13 @@ public class NoteServiceImpl implements NoteService {
     private NoteRepository noteRepository;
 
     @Override
+    public List<Note> getNotes() {
+        return noteRepository.findAll();
+    }
+
+    @Override
     public Note getNoteById(Integer noteId) {
-        return noteRepository.findById(noteId).get();
+        return noteRepository.findById(noteId).orElse(null);
     }
 
     @Override
@@ -33,12 +36,19 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public void updateNote(Integer noteId, NoteRequest noteRequest) {
-        Optional<Note> optionalNote = noteRepository.findById(noteId);
-        Note note = optionalNote.get();
+        Note note = noteRepository.findById(noteId).orElse(null);
+
+        if (note == null) {
+            return;
+        }
 
         NoteFields(note, noteRequest);
-
         noteRepository.save(note);
+    }
+
+    @Override
+    public void deleteNoteById(Integer noteId) {
+        noteRepository.deleteById(noteId);
     }
 
     private void NoteFields(Note note, NoteRequest noteRequest) {
