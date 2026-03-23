@@ -1,10 +1,12 @@
 package com.coralpersimmon.mynotenext.service.impl;
 
+import com.coralpersimmon.mynotenext.constant.NoteCategory;
 import com.coralpersimmon.mynotenext.dao.NoteRepository;
 import com.coralpersimmon.mynotenext.dto.NoteRequest;
 import com.coralpersimmon.mynotenext.model.Note;
 import com.coralpersimmon.mynotenext.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +17,21 @@ public class NoteServiceImpl implements NoteService {
     private NoteRepository noteRepository;
 
     @Override
-    public List<Note> getNotes() {
-        return noteRepository.findAll();
+    public List<Note> getNotes(NoteCategory noteCategory, String search) {
+        Specification<Note> specification = (root, query, criteriaBuilder) ->
+                criteriaBuilder.conjunction();
+
+        if (noteCategory != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("category"), noteCategory));
+        }
+
+        if (search != null && !search.isBlank()) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(root.get("title"), "%" + search + "%"));
+        }
+
+        return noteRepository.findAll(specification);
     }
 
     @Override

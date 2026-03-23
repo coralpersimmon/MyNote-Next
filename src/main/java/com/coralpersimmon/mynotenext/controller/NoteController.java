@@ -1,5 +1,6 @@
 package com.coralpersimmon.mynotenext.controller;
 
+import com.coralpersimmon.mynotenext.constant.NoteCategory;
 import com.coralpersimmon.mynotenext.dto.NoteRequest;
 import com.coralpersimmon.mynotenext.model.Note;
 import com.coralpersimmon.mynotenext.service.NoteService;
@@ -18,8 +19,9 @@ public class NoteController {
     private NoteService noteService;
 
     @GetMapping("/notes")
-    public ResponseEntity<List<Note>> getAllNotes() {
-        List<Note> noteList = noteService.getNotes();
+    public ResponseEntity<List<Note>> getNotes(@RequestParam(required = false)NoteCategory category,
+                                               @RequestParam(required = false)String search) {
+        List<Note> noteList = noteService.getNotes(category,search);
         return ResponseEntity.status(HttpStatus.OK).body(noteList);
     }
 
